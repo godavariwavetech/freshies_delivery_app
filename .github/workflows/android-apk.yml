@@ -63,12 +63,13 @@ jobs:
         working-directory: android
         run: |
           chmod +x gradlew
-          # newArchEnabled=true, so each autolinked library must have its
-          # android/build/generated/source/codegen/jni directory generated before
-          # CMake configures. Running this as a separate Gradle invocation forces
-          # the library codegen tasks to complete first, otherwise configureCMake
-          # fails with "add_subdirectory given source ... is not an existing directory".
-          ./gradlew :app:generateCodegenArtifactsFromSchema --no-daemon
+          # RN 0.80 bug (facebook/react-native#49387): configureCMake* runs before the
+          # autolinked libraries' codegen tasks, so CMake fails with
+          # "add_subdirectory given source ... is not an existing directory".
+          # Running the task UNQUALIFIED executes it in every project that defines it.
+          # Using ":app:generateCodegenArtifactsFromSchema" is not enough - the app
+          # module has no codegen specs of its own, so that task is SKIPPED.
+          ./gradlew generateCodegenArtifactsFromSchema --no-daemon
 
       - name: Build release APK
         working-directory: android
