@@ -59,10 +59,20 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
 
-      - name: Build release APK
+      - name: Generate codegen artifacts
         working-directory: android
         run: |
           chmod +x gradlew
+          # newArchEnabled=true, so each autolinked library must have its
+          # android/build/generated/source/codegen/jni directory generated before
+          # CMake configures. Running this as a separate Gradle invocation forces
+          # the library codegen tasks to complete first, otherwise configureCMake
+          # fails with "add_subdirectory given source ... is not an existing directory".
+          ./gradlew :app:generateCodegenArtifactsFromSchema --no-daemon
+
+      - name: Build release APK
+        working-directory: android
+        run: |
           ./gradlew assembleRelease --no-daemon
 
       - name: Upload APK artifact
