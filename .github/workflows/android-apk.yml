@@ -76,7 +76,14 @@ jobs:
         run: |
           ./gradlew assembleRelease --no-daemon
 
-      - name: Upload APK artifact
+      - name: Build debug APK
+        working-directory: android
+        run: |
+          # -PstandaloneDebugApk clears the react { debuggableVariants } default so the
+          # JS bundle is baked into the debug APK, making it installable without Metro.
+          ./gradlew assembleDebug -PstandaloneDebugApk --no-daemon
+
+      - name: Upload release APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: freshies-delivery-partner-apk
@@ -84,8 +91,18 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+      - name: Upload debug APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: freshies-delivery-partner-apk-debug
+          path: android/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          retention-days: 30
+
       - name: Upload APK to Release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: android/app/build/outputs/apk/release/*.apk
+          files: |
+            android/app/build/outputs/apk/release/*.apk
+            android/app/build/outputs/apk/debug/*.apk

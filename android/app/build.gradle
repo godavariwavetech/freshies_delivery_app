@@ -23,6 +23,14 @@ react {
     //   skip the bundling of the JS bundle and the assets. By default is just 'debug'.
     //   If you add flavors like lite, prod, etc. you'll have to list your debuggableVariants.
     // debuggableVariants = ["liteDebug", "prodDebug"]
+    //
+    //   CI passes -PstandaloneDebugApk to bake the JS bundle into the debug APK as
+    //   well, so the artifact it publishes installs and runs without a Metro dev
+    //   server. Local builds do not set this, so normal on-device development keeps
+    //   loading from Metro as usual.
+    if (project.hasProperty("standaloneDebugApk")) {
+        debuggableVariants = []
+    }
 
     /* Bundling */
     //   A list containing the node command and its flags. Default is just 'node'.
