@@ -17,7 +17,7 @@ const SplashScreen = () => {
     <View style={styles.container}>
       <Animated.View style={{ opacity: fadeAnim }}>
         <Image
-          source={require('../../android/app/src/main/res/drawable-xxxhdpi/splash_logo.png')}
+          source={require('../../android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png')}
           style={styles.logo}
           resizeMode="contain"
         />
