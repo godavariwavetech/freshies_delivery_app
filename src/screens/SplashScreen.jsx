@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+﻿import React, { useEffect, useRef } from 'react';
 import { View, Animated, Image, StyleSheet } from 'react-native';
 import { colors } from '../theme/colors';
 
@@ -17,7 +17,7 @@ const SplashScreen = () => {
     <View style={styles.container}>
       <Animated.View style={{ opacity: fadeAnim }}>
         <Image
-          source={require('../../android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png')}
+          source={require('../../assets/freshies_logo.png')}
           style={styles.logo}
           resizeMode="contain"
         />
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    width: 220,
-    height: 129,
+    width: 320,
+    height: 229,
   },
 });
